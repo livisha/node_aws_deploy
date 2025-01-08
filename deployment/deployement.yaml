@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: expressdemo-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: expressdemo
+  template:
+    metadata:
+      labels:
+        app: expressdemo
+    spec:
+      containers:
+        - name: expressdemo
+          image: livishajain/expressdemo
+          ports:
+            - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: expressdemo-service
+spec:
+  selector:
+    app: expressdemo
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: expressdemo-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: abhisha.com # Replace with your domain or host
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: expressdemo-service
+                port:
+                  number: 80

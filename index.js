@@ -35,6 +35,9 @@ app.get("/api/course", (req, res) => {
   res.send([1, 2, 3, "hello"]);
 });
 
+app.get("/api/abhishek", (req, res) => {
+  res.send("hello abhishek");
+});
 //params
 app.get("/api/course/:id", (req, res) => {
   res.send(req.params.id);
